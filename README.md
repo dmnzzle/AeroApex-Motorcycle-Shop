@@ -1,4 +1,4 @@
-# 🏍️ Aero Apex Motorcycle Accessories
+# Aero Apex Motorcycle Accessories
 
 Online store for premium motorcycle accessories. Built with Flask + SQLite. Includes a catalog of over 370 products, a full-featured admin panel, and WhatsApp ordering.
 
