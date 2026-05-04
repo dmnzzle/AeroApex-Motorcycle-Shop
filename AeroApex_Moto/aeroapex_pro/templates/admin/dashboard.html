@@ -1,0 +1,36 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="stats-row">
+  <div class="stat"><div class="stat-l">Productos</div><div class="stat-v">{{ st.prods }}</div></div>
+  <div class="stat"><div class="stat-l">Categorías</div><div class="stat-v">{{ st.cats }}</div></div>
+  <div class="stat"><div class="stat-l">Activos</div><div class="stat-v" style="color:var(--success)">{{ st.activos }}</div></div>
+  <div class="stat"><div class="stat-l">Sin stock</div><div class="stat-v" style="color:var(--warning)">{{ st.sin_stock }}</div></div>
+  <div class="stat"><div class="stat-l">Próximamente</div><div class="stat-v" style="color:var(--gold)">{{ st.prox }}</div></div>
+</div>
+<div class="card">
+  <div class="card-head"><h3>Productos recientes</h3><a href="/admin/productos/nuevo" class="btn btn-red btn-sm">+ Nuevo</a></div>
+  <table>
+    <thead><tr><th>Img</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th></th></tr></thead>
+    <tbody>
+    {% for p in rec %}
+    <tr>
+      <td>{% if p.imagen %}<img src="/static/{{ p.imagen }}" style="width:40px;height:36px;object-fit:cover;border:1px solid var(--border)"/>{% else %}<div style="width:40px;height:36px;background:var(--bg3);display:flex;align-items:center;justify-content:center">📦</div>{% endif %}</td>
+      <td><strong style="font-family:var(--font-h);text-transform:uppercase;letter-spacing:.03em;font-size:.88rem">{{ p.nombre }}</strong><div style="font-size:.68rem;color:var(--gray)">#{{ p.id }}</div></td>
+      <td>{% if p.cat_rel %}<span class="badge b-red">{{ p.cat_rel.nombre }}</span>{% else %}<span style="color:var(--gray2)">—</span>{% endif %}</td>
+      <td style="font-family:var(--font-h);font-weight:700">${{ "{:,.0f}".format(p.precio) }}</td>
+      <td>{% if p.stock>10 %}<span class="badge b-ok">{{ p.stock }}</span>{% elif p.stock>0 %}<span class="badge b-warn">{{ p.stock }}</span>{% else %}<span class="badge b-danger">0</span>{% endif %}</td>
+      <td>{% if p.proximamente %}<span class="badge b-gold">Próximo</span>{% elif p.activo %}<span class="badge b-ok">Activo</span>{% else %}<span class="badge b-gray">Inactivo</span>{% endif %}</td>
+      <td><a href="/admin/productos/editar/{{ p.id }}" class="btn btn-ghost btn-sm">Editar</a></td>
+    </tr>
+    {% else %}<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:2rem">Sin productos. <a href="/admin/productos/nuevo" style="color:var(--red)">Crear →</a></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+  <a href="/admin/categorias/nueva" class="btn btn-ghost" style="justify-content:center;padding:1rem">+ Nueva categoría</a>
+  <a href="/admin/banners/nuevo" class="btn btn-ghost" style="justify-content:center;padding:1rem">🖼️ Gestionar banners</a>
+</div>
+{% endblock %}

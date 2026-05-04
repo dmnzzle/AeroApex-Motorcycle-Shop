@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>{% block title %}Admin{% endblock %} · Aero Apex</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#080808;--bg2:#0f0f0f;--bg3:#161616;--bg4:#1e1e1e;--red:#e60000;--red2:#b30000;--white:#f5f5f5;--gray:#777;--gray2:#333;--border:#1a1a1a;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;--gold:#c8a84b;--sb:220px;--font-d:'Bebas Neue',sans-serif;--font-h:'Barlow Condensed',sans-serif;--font:'Barlow',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{font-family:var(--font-h)}
+.sb{width:var(--sb);min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0}
+.sb-brand{padding:1.2rem 1.4rem;border-bottom:1px solid var(--border)}
+.sb-brand-title{font-family:var(--font-d);font-size:1.1rem;letter-spacing:.06em}
+.sb-brand-title span{color:var(--red)}
+.sb-brand-sub{font-size:.65rem;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;margin-top:.1rem}
+.sb-section{padding:.65rem 1.3rem .2rem;font-size:.62rem;font-weight:800;color:var(--gray2);text-transform:uppercase;letter-spacing:.15em}
+.sb-item{display:flex;align-items:center;gap:.65rem;padding:.58rem 1.3rem;font-size:.82rem;color:var(--gray);transition:.15s;cursor:pointer}
+.sb-item:hover{background:var(--bg3);color:var(--white)}
+.sb-item.active{background:rgba(230,0,0,.1);color:var(--red);border-right:3px solid var(--red)}
+.sb-item .ic{width:16px;text-align:center;font-size:.85rem}
+.sb-foot{margin-top:auto;padding:1rem 1.3rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:.2rem}
+.main{margin-left:var(--sb);flex:1;display:flex;flex-direction:column}
+.topbar{height:52px;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-family:var(--font-h);font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.topbar-right{font-size:.78rem;color:var(--gray)}
+.content{padding:1.5rem;flex:1}
+.flash{padding:.7rem 1.1rem;border-radius:3px;margin-bottom:1.2rem;font-size:.82rem;font-weight:600;letter-spacing:.04em}
+.flash-success{background:rgba(34,197,94,.08);color:var(--success);border-left:3px solid var(--success)}
+.flash-info{background:rgba(255,255,255,.03);color:var(--gray);border-left:3px solid var(--gray2)}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:var(--border);margin-bottom:1.5rem}
+.stat{background:var(--bg2);padding:1.3rem 1.5rem;position:relative}
+.stat::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--red)}
+.stat-l{font-size:.68rem;font-family:var(--font-h);font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:.35rem}
+.stat-v{font-family:var(--font-d);font-size:2rem;letter-spacing:.04em}
+.card{background:var(--bg2);border:1px solid var(--border);margin-bottom:1.5rem}
+.card-head{padding:.85rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-head h3{font-family:var(--font-h);font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:.65rem 1rem;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--gray2);border-bottom:1px solid var(--border);background:var(--bg3)}
+td{padding:.75rem 1rem;border-bottom:1px solid var(--border);font-size:.82rem;vertical-align:middle}
+tr:last-child td{border:none}
+tr:hover td{background:rgba(255,255,255,.012)}
+.badge{display:inline-block;padding:.18rem .55rem;font-family:var(--font-h);font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.b-ok{background:rgba(34,197,94,.1);color:var(--success)}.b-warn{background:rgba(245,158,11,.1);color:var(--warning)}.b-danger{background:rgba(239,68,68,.1);color:var(--danger)}.b-gray{background:rgba(255,255,255,.04);color:var(--gray)}.b-red{background:rgba(230,0,0,.12);color:var(--red)}.b-gold{background:rgba(200,168,75,.1);color:var(--gold)}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.46rem 1rem;font-family:var(--font);font-weight:600;font-size:.78rem;cursor:pointer;border:none;transition:.15s;text-decoration:none}
+.btn-red{background:var(--red);color:white}.btn-red:hover{background:var(--red2)}
+.btn-danger{background:rgba(239,68,68,.08);color:var(--danger);border:1px solid rgba(239,68,68,.15)}.btn-danger:hover{background:var(--danger);color:white}
+.btn-ghost{background:transparent;color:var(--gray);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--red);color:var(--white)}
+.btn-sm{padding:.3rem .7rem;font-size:.72rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-grid.full{grid-template-columns:1fr}
+.field{margin-bottom:.05rem}
+.field label{display:block;font-size:.68rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.32rem}
+.field input,.field textarea,.field select{width:100%;padding:.65rem .9rem;background:var(--bg3);border:1px solid var(--border);border-top:none;border-left:none;border-right:none;border-bottom:1px solid #2a2a2a;color:var(--white);font-family:var(--font);font-size:.85rem;outline:none;transition:.2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-bottom-color:var(--red)}
+.field select option{background:var(--bg3)}
+.field .hint{font-size:.68rem;color:var(--gray2);margin-top:.25rem}
+.check-row{display:flex;align-items:center;gap:.6rem;font-size:.85rem;cursor:pointer}
+.check-row input{accent-color:var(--red);width:14px;height:14px}
+.form-actions{display:flex;gap:.75rem;margin-top:1.3rem}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.3rem}
+.page-head h1{font-family:var(--font-h);font-size:1.35rem;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.form-card{background:var(--bg2);border:1px solid var(--border);padding:1.5rem;max-width:680px;margin-bottom:1.5rem}
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+<aside class="sb">
+  <div class="sb-brand"><div class="sb-brand-title">AERO <span>APEX</span></div><div class="sb-brand-sub">Admin Panel</div></div>
+  <div class="sb-section">Principal</div>
+  <a href="/admin" class="sb-item {% if request.path=='/admin' %}active{% endif %}"><span class="ic">📊</span>Dashboard</a>
+  <div class="sb-section">Catálogo</div>
+  <a href="/admin/categorias" class="sb-item {% if 'categorias' in request.path %}active{% endif %}"><span class="ic">📁</span>Categorías</a>
+  <a href="/admin/productos" class="sb-item {% if 'productos' in request.path %}active{% endif %}"><span class="ic">📦</span>Productos</a>
+  <div class="sb-section">Contenido</div>
+  <a href="/admin/media" class="sb-item {% if 'media' in request.path and 'secciones' not in request.path %}active{% endif %}"><span class="ic">🎬</span>Multimedia</a>
+  <a href="/admin/secciones" class="sb-item {% if 'secciones' in request.path %}active{% endif %}"><span class="ic">🖼️</span>Imágenes Secciones</a>
+  <a href="/admin/banners" class="sb-item {% if 'banners' in request.path and 'secciones' not in request.path %}active{% endif %}"><span class="ic">🖼️</span>Banners Hero</a>
+  <div class="sb-section">Diseño</div>
+  <a href="/admin/diseno" class="sb-item {% if 'diseno' in request.path %}active{% endif %}"><span class="ic">🎨</span>Colores & Botones</a>
+  <div class="sb-section">Páginas</div>
+  <a href="/admin/pagina-inicio" class="sb-item {% if 'pagina-inicio' in request.path %}active{% endif %}"><span class="ic">🏠</span>Página de Inicio</a>
+  <a href="/admin/pagina-info" class="sb-item {% if 'pagina-info' in request.path %}active{% endif %}"><span class="ic">📋</span>Página Información</a>
+  <div class="sb-section">Sistema</div>
+  <a href="/admin/config" class="sb-item {% if 'config' in request.path %}active{% endif %}"><span class="ic">⚙️</span>Configuración</a>
+  <div class="sb-foot">
+    <a href="/" target="_blank" class="sb-item"><span class="ic">🌐</span>Ver tienda</a>
+    <a href="/admin/logout" class="sb-item" style="color:var(--danger)"><span class="ic">🚪</span>Salir</a>
+  </div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-title">{% block page_title %}Panel{% endblock %}</span>
+    <div class="topbar-right">👤 {{ session.get('admin_u','Admin') }}</div>
+  </div>
+  <div class="content">
+    {% with msgs=get_flashed_messages(with_categories=true) %}{% for c,m in msgs %}<div class="flash flash-{{ c }}">{{ m }}</div>{% endfor %}{% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

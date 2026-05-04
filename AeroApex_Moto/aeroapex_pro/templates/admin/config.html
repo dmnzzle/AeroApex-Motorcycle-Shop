@@ -1,0 +1,57 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Configuración{% endblock %}
+{% block page_title %}Configuración del Sitio{% endblock %}
+{% block content %}
+<div style="max-width:640px">
+  <div class="form-card">
+    <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1.2rem">Contacto y Redes</div>
+    <form method="POST">
+      <div class="field" style="margin-bottom:1rem">
+        <label>Número de WhatsApp *</label>
+        <input name="whatsapp" value="{{ cfg.whatsapp }}" required placeholder="573180517417"/>
+        <div class="hint">Sin + ni espacios. Colombia: 57 + número</div>
+      </div>
+      <div class="field" style="margin-bottom:1rem">
+        <label>Correo electrónico</label>
+        <input name="email" value="{{ cfg.email }}" placeholder="aeroapexmotorcycle@gmail.com"/>
+      </div>
+      <div class="form-grid" style="margin-bottom:1rem">
+        <div class="field"><label>Instagram</label><input name="instagram" value="{{ cfg.instagram }}" placeholder="aeroapex.ridex"/></div>
+        <div class="field"><label>TikTok</label><input name="tiktok" value="{{ cfg.tiktok }}" placeholder="aeroapex.ridex"/></div>
+      </div>
+      <div class="field" style="margin-bottom:1.5rem">
+        <label>Facebook</label>
+        <input name="facebook" value="{{ cfg.facebook }}" placeholder="Aero Apex Moto"/>
+      </div>
+      <div style="background:var(--bg3);border-top:1px solid var(--border);margin:-1.5rem -1.5rem 1.5rem;padding:1rem 1.5rem">
+        <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem">Textos del sitio</div>
+        <div class="field" style="margin-bottom:1rem">
+          <label>Barra de anuncios (franja roja superior)</label>
+          <input name="ann" value="{{ cfg.ann }}" placeholder="🏍️ ENVÍOS GRATIS EN BOGOTÁ · ..."/>
+        </div>
+        <div class="field" style="margin-bottom:1rem">
+          <label>Política de envíos (página Información)</label>
+          <textarea name="envio_texto" rows="3">{{ cfg.envio_texto }}</textarea>
+        </div>
+        <div class="field" style="margin-bottom:.25rem">
+          <label>Tema por defecto del sitio</label>
+          <select name="dark_mode">
+            <option value="1" {% if cfg.dark_mode=='1' %}selected{% endif %}>Oscuro (Dark mode)</option>
+            <option value="0" {% if cfg.dark_mode=='0' %}selected{% endif %}>Claro (Light mode)</option>
+          </select>
+          <div class="hint">El usuario puede cambiarlo manualmente con el botón en el navbar</div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-red">💾 GUARDAR CONFIGURACIÓN</button>
+    </form>
+  </div>
+  <div class="form-card">
+    <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem">Accesos rápidos</div>
+    <div style="display:flex;flex-direction:column;gap:.6rem;font-size:.85rem;color:var(--gray)">
+      <div>🌐 Tienda: <a href="/" target="_blank" style="color:var(--red)">http://localhost:5000</a></div>
+      <div>🖼️ Secciones: <a href="/admin/secciones" style="color:var(--red)">Cambiar imágenes de secciones</a></div>
+      <div>👤 Usuario: <span style="color:var(--white)">{{ session.get('admin_u') }}</span></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

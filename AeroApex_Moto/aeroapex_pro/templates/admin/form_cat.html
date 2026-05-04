@@ -1,0 +1,30 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{% if cat %}Editar{% else %}Nueva{% endif %} Categoría{% endblock %}
+{% block page_title %}{% if cat %}Editar Categoría{% else %}Nueva Categoría{% endif %}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>{% if cat %}{{ cat.nombre }}{% else %}Nueva Categoría{% endif %}</h1><a href="/admin/categorias" class="btn btn-ghost">← Volver</a></div>
+<div class="form-card">
+  <form method="POST" enctype="multipart/form-data">
+    <div class="form-grid" style="margin-bottom:1rem">
+      <div class="field"><label>Nombre *</label><input name="nombre" required value="{{ cat.nombre if cat else '' }}" placeholder="Ej: Espejos"/></div>
+      <div class="field"><label>Orden (número)</label><input name="orden" type="number" value="{{ cat.orden if cat else 0 }}" min="0"/></div>
+    </div>
+    <div class="field" style="margin-bottom:1rem">
+      <label>Descripción breve</label>
+      <input name="descripcion" value="{{ cat.descripcion if cat else '' }}" placeholder="Descripción corta de la categoría"/>
+    </div>
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>Imagen de categoría (opcional)</label>
+      <input name="imagen" type="file" accept="image/*"/>
+      <div class="hint">Recomendado: 600×400px · JPG, PNG, WEBP{% if cat and cat.imagen %} · <span style="color:var(--success)">✓ Imagen actual cargada</span>{% endif %}</div>
+    </div>
+    <label class="check-row" style="margin-bottom:1.3rem">
+      <input type="checkbox" name="activa" {% if not cat or cat.activa %}checked{% endif %}/> Categoría activa (visible en la tienda)
+    </label>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-red">{% if cat %}GUARDAR CAMBIOS{% else %}CREAR CATEGORÍA{% endif %}</button>
+      <a href="/admin/categorias" class="btn btn-ghost">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

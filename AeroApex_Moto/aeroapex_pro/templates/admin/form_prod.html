@@ -1,0 +1,94 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{% if p %}Editar{% else %}Nuevo{% endif %} Producto{% endblock %}
+{% block page_title %}{% if p %}Editar: {{ p.nombre }}{% else %}Nuevo Producto{% endif %}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>{% if p %}Editar Producto{% else %}Nuevo Producto{% endif %}</h1><a href="/admin/productos" class="btn btn-ghost">← Volver</a></div>
+<div style="display:grid;grid-template-columns:1fr 300px;gap:1.5rem;max-width:1000px">
+  <div>
+    <form method="POST" enctype="multipart/form-data" id="prod-form">
+      <div class="form-card">
+        <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem">Información</div>
+        <div class="field" style="margin-bottom:1rem"><label>Nombre *</label><input name="nombre" required value="{{ p.nombre if p else '' }}" placeholder="Ej: Espejo Retrovisor CNC Titanio"/></div>
+        <div class="field" style="margin-bottom:1rem"><label>Descripción</label><textarea name="descripcion" rows="4" placeholder="Materiales, compatibilidad, características...">{{ p.descripcion if p else '' }}</textarea></div>
+        <div class="form-grid" style="margin-bottom:1rem">
+          <div class="field"><label>Precio (COP) *</label><input name="precio" type="number" step="1000" min="0" required value="{{ p.precio|int if p else '' }}" placeholder="0"/></div>
+          <div class="field"><label>Precio anterior (tachado)</label><input name="precio_antes" type="number" step="1000" min="0" value="{{ p.precio_antes|int if p and p.precio_antes else '' }}" placeholder="0"/></div>
+        </div>
+        <div class="form-grid" style="margin-bottom:1rem">
+          <div class="field"><label>Stock</label><input name="stock" type="number" min="0" value="{{ p.stock if p else 0 }}"/></div>
+          <div class="field"><label>Categoría</label>
+            <select name="categoria_id">
+              <option value="">Sin categoría</option>
+              {% for c in cats %}<option value="{{ c.id }}" {% if p and p.categoria_id==c.id %}selected{% endif %}>{{ c.icono }} {{ c.nombre }}</option>{% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:1.2rem">
+          <label>Imagen principal</label>
+          <input name="imagen" type="file" accept="image/*" onchange="previewImg(this)"/>
+          <div class="hint">800×800px · JPG, PNG, WEBP · Máx 12MB{% if p and p.imagen %} · <span style="color:var(--success)">✓ Cargada</span>{% endif %}</div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem">Visibilidad</div>
+        <div style="display:flex;flex-direction:column;gap:.85rem">
+          <label class="check-row"><input type="checkbox" name="activo" {% if not p or p.activo %}checked{% endif %}/> Activo (visible en tienda)</label>
+          <label class="check-row"><input type="checkbox" name="destacado" {% if p and p.destacado %}checked{% endif %}/> ★ Destacado (aparece en inicio)</label>
+          <label class="check-row"><input type="checkbox" name="nuevo" {% if p and p.nuevo %}checked{% endif %}/> Etiqueta "Nuevo"</label>
+          <label class="check-row"><input type="checkbox" name="proximamente" {% if p and p.proximamente %}checked{% endif %}/> 🔒 Próximamente</label>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-red">{% if p %}GUARDAR CAMBIOS{% else %}CREAR PRODUCTO{% endif %}</button>
+        <a href="/admin/productos" class="btn btn-ghost">Cancelar</a>
+      </div>
+    </form>
+
+    <!-- GALERÍA DE IMÁGENES ADICIONALES (solo en edición) -->
+    {% if p %}
+    <div class="form-card" style="margin-top:1.5rem">
+      <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem">
+        Galería de imágenes adicionales
+        <span style="color:var(--gray2);font-weight:400;font-size:.68rem;margin-left:.5rem">(se muestran en el detalle del producto)</span>
+      </div>
+      {% if p.imagenes_list %}
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.75rem;margin-bottom:1.2rem">
+        {% for img in p.imagenes_list %}
+        <div style="position:relative">
+          <img src="/static/{{ img }}" style="width:100%;aspect-ratio:1;object-fit:cover;border:1px solid var(--border)"/>
+          <form method="POST" action="/admin/productos/imagen-extra/eliminar/{{ p.id }}/{{ loop.index0 }}" style="position:absolute;top:.3rem;right:.3rem" onsubmit="return confirm('¿Eliminar esta imagen?')">
+            <button type="submit" style="background:rgba(239,68,68,.9);border:none;color:#fff;width:22px;height:22px;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div style="text-align:center;padding:1.5rem;color:var(--gray);font-size:.82rem;border:1px dashed var(--border);margin-bottom:1rem">Sin imágenes adicionales</div>
+      {% endif %}
+      <form method="POST" action="/admin/productos/imagenes/{{ p.id }}" enctype="multipart/form-data">
+        <div class="field" style="margin-bottom:.75rem">
+          <label>Agregar imágenes (puedes seleccionar varias)</label>
+          <input name="imagenes" type="file" accept="image/*" multiple/>
+          <div class="hint">Selecciona una o varias imágenes · Recomendado: 800×800px</div>
+        </div>
+        <button type="submit" class="btn btn-ghost btn-sm">+ Agregar imágenes</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- PREVIEW -->
+  <div>
+    <div class="form-card" style="max-width:100%;position:sticky;top:60px">
+      <div style="font-family:var(--font-h);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:.75rem">Preview imagen principal</div>
+      <div id="img-preview" style="width:100%;aspect-ratio:1;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:3rem;color:#333">
+        {% if p and p.imagen %}<img src="/static/{{ p.imagen }}" style="width:100%;height:100%;object-fit:cover"/>{% else %}📷{% endif %}
+      </div>
+      <div style="margin-top:.75rem;font-size:.72rem;color:var(--gray2);line-height:1.6">
+        · Fondo negro o neutro<br>· Mín. 800×800 px<br>· Sin marcas de agua<br>· Producto centrado
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script>function previewImg(input){if(input.files&&input.files[0]){const r=new FileReader();r.onload=e=>{document.getElementById('img-preview').innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover"/>`;};r.readAsDataURL(input.files[0]);}}</script>{% endblock %}

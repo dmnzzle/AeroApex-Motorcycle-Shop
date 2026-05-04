@@ -1,0 +1,46 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Productos{% endblock %}
+{% block page_title %}Productos{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Productos <span style="color:var(--gray);font-size:1rem;font-weight:400">({{ prods|length }})</span></h1>
+  <div style="display:flex;gap:.6rem;align-items:center">
+    <form method="GET" style="display:flex">
+      <select name="cat" onchange="this.form.submit()" style="background:var(--bg2);border:1px solid var(--border);color:var(--white);padding:.38rem .75rem;font-family:var(--font);font-size:.78rem;outline:none;cursor:pointer">
+        <option value="0">Todas las categorías</option>
+        {% for c in cats %}<option value="{{ c.id }}" {% if c.id==cid %}selected{% endif %}>{{ c.icono }} {{ c.nombre }}</option>{% endfor %}
+      </select>
+    </form>
+    <a href="/admin/productos/nuevo" class="btn btn-red">+ Nuevo</a>
+  </div>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Img</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Flags</th><th>Estado</th><th>Acciones</th></tr></thead>
+    <tbody>
+    {% for p in prods %}
+    <tr>
+      <td>{% if p.imagen %}<img src="/static/{{ p.imagen }}" style="width:44px;height:40px;object-fit:cover;border:1px solid var(--border)"/>{% else %}<div style="width:44px;height:40px;background:var(--bg3);display:flex;align-items:center;justify-content:center">📦</div>{% endif %}</td>
+      <td><strong style="font-family:var(--font-h);text-transform:uppercase;letter-spacing:.03em;font-size:.88rem">{{ p.nombre }}</strong><div style="font-size:.65rem;color:var(--gray)">#{{ p.id }}</div></td>
+      <td>{% if p.cat_rel %}<span class="badge b-red">{{ p.cat_rel.nombre }}</span>{% else %}<span style="color:var(--gray2)">—</span>{% endif %}</td>
+      <td><div style="font-family:var(--font-h);font-weight:700">${{ "{:,.0f}".format(p.precio) }}</div>{% if p.precio_antes and p.precio_antes>p.precio %}<div style="font-size:.68rem;color:var(--gray2);text-decoration:line-through">${{ "{:,.0f}".format(p.precio_antes) }}</div>{% endif %}</td>
+      <td>{% if p.stock>10 %}<span class="badge b-ok">{{ p.stock }}</span>{% elif p.stock>0 %}<span class="badge b-warn">{{ p.stock }}</span>{% else %}<span class="badge b-danger">0</span>{% endif %}</td>
+      <td style="display:flex;flex-direction:column;gap:.2rem">
+        {% if p.destacado %}<span class="badge b-warn" style="font-size:.6rem">★ Top</span>{% endif %}
+        {% if p.nuevo %}<span class="badge b-ok" style="font-size:.6rem">Nuevo</span>{% endif %}
+        {% if p.proximamente %}<span class="badge b-gold" style="font-size:.6rem">Pronto</span>{% endif %}
+      </td>
+      <td>{% if p.activo %}<span class="badge b-ok">Activo</span>{% else %}<span class="badge b-gray">Inactivo</span>{% endif %}</td>
+      <td><div style="display:flex;gap:.3rem">
+        <a href="/admin/productos/editar/{{ p.id }}" class="btn btn-ghost btn-sm">Editar</a>
+        <form method="POST" action="/admin/productos/eliminar/{{ p.id }}" style="display:inline" onsubmit="return confirm('¿Eliminar?')">
+          <button type="submit" class="btn btn-danger btn-sm">×</button>
+        </form>
+      </div></td>
+    </tr>
+    {% else %}<tr><td colspan="8" style="text-align:center;color:var(--gray);padding:2rem">Sin productos. <a href="/admin/productos/nuevo" style="color:var(--red)">Crear →</a></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

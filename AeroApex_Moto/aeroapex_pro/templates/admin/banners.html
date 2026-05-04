@@ -1,0 +1,39 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Banners{% endblock %}
+{% block page_title %}Banners Hero{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Banners <span style="color:var(--gray);font-size:1rem;font-weight:400">({{ slides|length }})</span></h1>
+  <a href="/admin/banners/nuevo" class="btn btn-red">+ Nuevo banner</a>
+</div>
+<div style="background:rgba(200,168,75,.06);border:1px solid rgba(200,168,75,.15);padding:.75rem 1rem;margin-bottom:1.2rem;font-size:.8rem;color:var(--gold);font-family:var(--font-h);letter-spacing:.04em">
+  ℹ Los banners aparecen en la sección hero de la página de inicio. Recomendado: 1400×500px.
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Imagen</th><th>Título</th><th>Subtítulo</th><th>Link</th><th>Orden</th><th>Estado</th><th>Acciones</th></tr></thead>
+    <tbody>
+    {% for b in slides %}
+    <tr>
+      <td>{% if b.imagen %}<img src="/static/{{ b.imagen }}" style="width:80px;height:44px;object-fit:cover;border:1px solid var(--border)"/>{% else %}<div style="width:80px;height:44px;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--gray2)">🖼️</div>{% endif %}</td>
+      <td><strong style="font-family:var(--font-h);text-transform:uppercase;letter-spacing:.04em">{{ b.titulo or '—' }}</strong></td>
+      <td style="color:var(--gray);font-size:.78rem;max-width:160px">{{ b.subtitulo[:50] if b.subtitulo else '—' }}</td>
+      <td style="font-size:.75rem;color:var(--gray)">{{ b.link[:30] if b.link else '—' }}</td>
+      <td style="color:var(--gray)">{{ b.orden }}</td>
+      <td>{% if b.activo %}<span class="badge b-ok">Activo</span>{% else %}<span class="badge b-gray">Inactivo</span>{% endif %}</td>
+      <td>
+        <div style="display:flex;gap:.35rem">
+          <a href="/admin/banners/editar/{{ b.id }}" class="btn btn-ghost btn-sm">Editar</a>
+          <form method="POST" action="/admin/banners/eliminar/{{ b.id }}" style="display:inline" onsubmit="return confirm('¿Eliminar este banner?')">
+            <button type="submit" class="btn btn-danger btn-sm">×</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" style="text-align:center;color:var(--gray);padding:2rem">Sin banners. <a href="/admin/banners/nuevo" style="color:var(--red)">Crear el primero →</a></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

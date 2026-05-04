@@ -1,0 +1,36 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Editar Sección: {{ s.seccion }}{% endblock %}
+{% block page_title %}Imagen de Sección: {{ s.seccion|upper }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>{{ s.seccion|upper }}</h1><a href="/admin/secciones" class="btn btn-ghost">← Volver</a></div>
+<div class="form-card" style="max-width:580px">
+  <div style="background:rgba(200,168,75,.06);border:1px solid rgba(200,168,75,.15);padding:.7rem 1rem;margin-bottom:1.2rem;font-size:.8rem;color:var(--gold);font-family:var(--font-h);letter-spacing:.04em">
+    📐 Tamaño recomendado: <strong>{{ size_info[0] }}</strong> — {{ size_info[1] }}
+  </div>
+  {% if s.imagen %}
+  <div style="margin-bottom:1rem">
+    <div style="font-size:.7rem;color:var(--gray);font-family:var(--font-h);font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem">Imagen actual</div>
+    <img src="/static/{{ s.imagen }}" style="width:100%;max-height:160px;object-fit:cover;border:1px solid var(--border)"/>
+  </div>
+  {% endif %}
+  <form method="POST" enctype="multipart/form-data">
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>Nueva imagen</label>
+      <input name="imagen" type="file" accept="image/*" required onchange="previewSec(this)"/>
+      <div class="hint">JPG, PNG, WEBP · Máx 12MB · Mínimo {{ size_info[0] }}</div>
+    </div>
+    <div id="sec-preview" style="display:none;margin-bottom:1rem">
+      <img id="sec-img" style="width:100%;max-height:160px;object-fit:cover;border:1px solid var(--border)"/>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-red">GUARDAR IMAGEN</button>
+      <a href="/admin/secciones" class="btn btn-ghost">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function previewSec(i){if(i.files&&i.files[0]){const r=new FileReader();r.onload=e=>{document.getElementById('sec-preview').style.display='block';document.getElementById('sec-img').src=e.target.result;};r.readAsDataURL(i.files[0]);}}
+</script>
+{% endblock %}

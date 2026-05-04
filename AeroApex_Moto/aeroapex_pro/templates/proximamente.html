@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Próximamente · Aero Apex{% endblock %}
+{% block extra_head %}
+<style>
+.prox-hero{padding:5rem 2rem;text-align:center;background:var(--dark2);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.prox-hero::before{content:'SOON';position:absolute;font-family:var(--font-display);font-size:20vw;color:rgba(230,0,0,.04);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap;letter-spacing:.1em}
+.prox-hero h1{font-family:var(--font-display);font-size:clamp(3rem,8vw,6rem);letter-spacing:.04em;position:relative;z-index:1}
+.prox-hero p{color:var(--gray);max-width:480px;margin:.75rem auto 0;font-size:.95rem;position:relative;z-index:1}
+.prox-section{max-width:1200px;margin:0 auto;padding:4rem 2rem}
+.prox-empty{text-align:center;padding:5rem 2rem;color:var(--gray)}
+.prox-empty span{font-size:4rem;display:block;margin-bottom:1.5rem}
+.countdown-note{display:inline-flex;align-items:center;gap:.5rem;background:rgba(200,168,75,.08);border:1px solid rgba(200,168,75,.2);color:var(--gold);padding:.35rem 1rem;font-family:var(--font-head);font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-top:1.5rem}
+.notify-section{background:var(--dark3);border-top:1px solid var(--border);padding:4rem 2rem;text-align:center}
+.notify-section h3{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,3rem);letter-spacing:.04em;margin-bottom:.75rem}
+.notify-section p{color:var(--gray);margin-bottom:2rem}
+</style>
+{% endblock %}
+{% block content %}
+<div class="prox-hero">
+  <span style="font-family:var(--font-head);font-size:.78rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:.75rem">Coming Soon</span>
+  <h1>PRÓXIMAMENTE</h1>
+  <p>Nuevos productos en camino. Estamos trabajando para traerte lo mejor en accesorios para tu moto.</p>
+  <div class="countdown-note">⏳ Llegando muy pronto</div>
+</div>
+
+<div class="prox-section">
+  {% if prods %}
+  <div style="margin-bottom:2.5rem">
+    <span class="sec-label">Adelanto exclusivo</span>
+    <h2 class="sec-title">Lo que viene</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="grid-bg">
+    <div class="grid-4r">
+      {% for p in prods %}
+      <div class="p-card" style="cursor:default">
+        <div class="p-card-img" style="position:relative">
+          {% if p.imagen %}<img src="/static/{{ p.imagen }}" alt="{{ p.nombre }}" style="filter:blur(3px);transform:scale(1.05)"/>
+          {% else %}<div class="p-no-img">{{ p.cat_rel.icono if p.cat_rel else '🏍️' }}</div>{% endif %}
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5)">
+            <div style="text-align:center">
+              <div style="font-size:2rem;margin-bottom:.5rem">🔒</div>
+              <span class="badge b-prox" style="font-size:.75rem;padding:.3rem .8rem">Próximamente</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-body">
+          {% if p.cat_rel %}<div class="p-cat">{{ p.cat_rel.nombre }}</div>{% endif %}
+          <div class="p-name">{{ p.nombre }}</div>
+          {% if p.descripcion %}<div class="p-desc">{{ p.descripcion }}</div>{% endif %}
+          <a href="https://wa.me/{{ WHATSAPP }}?text=Hola!%20Me%20interesa%20saber%20cuándo%20llega:%20*{{ p.nombre|urlencode }}*"
+             target="_blank" class="btn btn-wsp btn-sm" style="justify-content:center;margin-top:auto">
+            💬 Notificarme
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <div class="prox-empty">
+    <span>🚀</span>
+    <h3 style="font-family:var(--font-display);font-size:2rem;letter-spacing:.04em;margin-bottom:.75rem">Grandes cosas en camino</h3>
+    <p>Estamos preparando nuevos productos increíbles.<br>Síguenos en redes sociales para ser el primero en enterarte.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap">
+      <a href="https://instagram.com/aeroapex.ridex" target="_blank" class="btn btn-outline-red" style="background:transparent;color:var(--red);border:2px solid var(--red)">📷 Instagram</a>
+      <a href="https://wa.me/{{ WHATSAPP }}" target="_blank" class="btn btn-wsp">💬 WhatsApp</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<div class="notify-section">
+  <h3>¿QUIERES SER EL PRIMERO?</h3>
+  <p>Escríbenos y te avisamos en cuanto lleguen los nuevos productos</p>
+  <a href="https://wa.me/{{ WHATSAPP }}?text=Hola!%20Quiero%20que%20me%20notifiquen%20cuando%20lleguen%20los%20nuevos%20productos%20de%20Aero%20Apex%20🏍️" target="_blank" class="btn btn-wsp" style="font-size:1rem;padding:.85rem 2.5rem;margin:0 auto">
+    💬 NOTIFICARME
+  </a>
+</div>
+{% endblock %}

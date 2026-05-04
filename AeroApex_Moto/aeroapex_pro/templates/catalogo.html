@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Catálogo · Aero Apex{% endblock %}
+{% block extra_head %}
+<style>
+.shop-wrap{display:grid;grid-template-columns:220px 1fr;gap:0;max-width:1300px;margin:0 auto;min-height:80vh}
+.shop-side{border-right:1px solid var(--border);padding:2rem 1.5rem;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto}
+.shop-side::-webkit-scrollbar{width:3px}
+.shop-main{padding:2rem}
+.side-title{font-family:var(--font-head);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.18em;color:#444;margin-bottom:1rem}
+.side-link{display:flex;align-items:center;justify-content:space-between;padding:.5rem .75rem;font-size:.84rem;color:var(--gray);transition:.18s;border-left:2px solid transparent}
+.side-link:hover{color:var(--white);background:rgba(255,255,255,.03)}
+.side-link.active{color:var(--red);border-left-color:var(--red);background:rgba(230,0,0,.05)}
+.side-count{font-size:.68rem;color:#333;font-family:var(--font-head);font-weight:700}
+.shop-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem}
+.shop-count{font-size:.82rem;color:var(--gray);font-family:var(--font-head);letter-spacing:.08em;text-transform:uppercase}
+.sort-sel{background:var(--dark2);border:1px solid var(--border);color:var(--white);padding:.45rem .85rem;font-family:var(--font);font-size:.82rem;outline:none;cursor:pointer}
+.sort-sel option{background:var(--dark2)}
+.cat-page-head{padding:3rem 2rem 2rem;border-bottom:1px solid var(--border);background:var(--dark2)}
+.cat-page-head h1{font-family:var(--font-display);font-size:clamp(2rem,6vw,4rem);letter-spacing:.04em}
+.breadcrumb{font-size:.75rem;color:var(--gray);display:flex;gap:.5rem;margin-bottom:.75rem;font-family:var(--font-head);letter-spacing:.06em;text-transform:uppercase}
+.breadcrumb a:hover{color:var(--red)}
+@media(max-width:768px){.shop-wrap{grid-template-columns:1fr}.shop-side{position:static;height:auto;border:none;border-bottom:1px solid var(--border);padding:1rem}}
+</style>
+{% endblock %}
+{% block content %}
+<div class="cat-page-head">
+  <div style="max-width:1300px;margin:0 auto">
+    <div class="breadcrumb"><a href="/">Inicio</a><span>/</span>
+    {% if cid %}<a href="/catalogo">Catálogo</a><span>/</span>
+    {% for c in cats %}{% if c.id==cid %}<span style="color:var(--white)">{{ c.nombre }}</span>{% endif %}{% endfor %}
+    {% else %}<span style="color:var(--white)">Todo el catálogo</span>{% endif %}</div>
+    <h1>{% if cid %}{% for c in cats %}{% if c.id==cid %}{{ c.nombre }}{% endif %}{% endfor %}{% elif q %}Resultados: "{{ q }}"{% else %}Catálogo{% endif %}</h1>
+  </div>
+</div>
+<div class="shop-wrap">
+  <aside class="shop-side">
+    <div class="side-title">Categorías</div>
+    <a href="/catalogo" class="side-link {% if not cid %}active{% endif %}">Todo<span class="side-count">{{ prods|length if not cid }}</span></a>
+    {% for c in cats %}
+    <a href="/catalogo?cat={{ c.id }}" class="side-link {% if c.id==cid %}active{% endif %}">{{ c.nombre }}<span class="side-count">{{ c.productos|length }}</span></a>
+    {% endfor %}
+    <div class="side-title" style="margin-top:2rem">Ordenar</div>
+    <form method="GET" id="sort-form">
+      {% if cid %}<input type="hidden" name="cat" value="{{ cid }}"/>{% endif %}
+      {% if q %}<input type="hidden" name="q" value="{{ q }}"/>{% endif %}
+      {% for val,lbl in [('nuevo','Más recientes'),('precio_asc','Precio ↑'),('precio_desc','Precio ↓'),('destacado','Destacados')] %}
+      <button type="submit" name="sort" value="{{ val }}" style="display:block;width:100%;text-align:left;padding:.5rem .75rem;background:none;border:none;font-family:var(--font);font-size:.84rem;color:{% if sort==val %}var(--red){% else %}var(--gray){% endif %};cursor:pointer;transition:.18s;border-left:2px solid {% if sort==val %}var(--red){% else %}transparent{% endif %}">{{ lbl }}</button>
+      {% endfor %}
+    </form>
+  </aside>
+  <div class="shop-main">
+    <div class="shop-head">
+      <span class="shop-count">{{ prods|length }} producto{% if prods|length!=1 %}s{% endif %}</span>
+      <form action="/catalogo" method="GET" style="display:flex;border-bottom:1px solid var(--border)">
+        {% if cid %}<input type="hidden" name="cat" value="{{ cid }}"/>{% endif %}
+        <input type="text" name="q" value="{{ q }}" placeholder="Buscar..." style="background:transparent;border:none;color:var(--white);font-family:var(--font);font-size:.85rem;padding:.4rem .6rem;outline:none;width:200px"/>
+        <button type="submit" style="background:none;border:none;color:var(--red);cursor:pointer;padding:0 .5rem">🔍</button>
+      </form>
+    </div>
+    {% if prods %}
+    <div class="grid-bg"><div class="grid-4r">{% for p in prods %}{% include 'partials/pcard.html' %}{% endfor %}</div></div>
+    {% else %}
+    <div style="padding:4rem;text-align:center;color:var(--gray)"><div style="font-size:3rem;margin-bottom:1rem">🔍</div>No se encontraron productos.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

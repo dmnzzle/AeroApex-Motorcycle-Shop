@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/><title>Admin · Aero Apex</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',sans-serif;background:#000;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(230,0,0,.08),transparent);pointer-events:none}
+.box{background:#0f0f0f;border:1px solid #1e1e1e;padding:2.8rem;width:380px}
+.brand{text-align:center;margin-bottom:2.2rem}
+.brand h1{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.08em}
+.brand h1 span{color:#e60000}
+.brand p{font-size:.72rem;color:#555;letter-spacing:.2em;text-transform:uppercase;margin-top:.2rem}
+label{display:block;font-size:.7rem;font-weight:600;color:#444;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.38rem}
+input{width:100%;padding:.78rem 1rem;background:#161616;border:1px solid #2a2a2a;border-top:none;border-left:none;border-right:none;border-bottom:1px solid #333;color:#fff;font-family:'Barlow',sans-serif;font-size:.92rem;outline:none;transition:.2s;margin-bottom:1.2rem}
+input:focus{border-bottom-color:#e60000}
+button{width:100%;padding:.82rem;background:#e60000;color:white;border:none;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.15em;cursor:pointer;transition:.2s}
+button:hover{background:#cc0000}
+.err{background:rgba(230,0,0,.08);color:#ff4444;border-left:3px solid #e60000;padding:.65rem 1rem;font-size:.82rem;margin-bottom:1.2rem}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="brand"><h1>AERO <span>APEX</span></h1><p>Panel de Administración</p></div>
+  {% if err %}<div class="err">{{ err }}</div>{% endif %}
+  <form method="POST">
+    <label>Usuario</label><input name="usuario" required autocomplete="username"/>
+    <label>Contraseña</label><input name="password" type="password" required/>
+    <button type="submit">INGRESAR →</button>
+  </form>
+</div>
+</body>
+</html>

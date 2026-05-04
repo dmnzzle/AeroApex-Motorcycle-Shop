@@ -1,0 +1,96 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Imágenes · {{ p.nombre }}{% endblock %}
+{% block page_title %}Galería de Imágenes{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Imágenes: <span style="color:var(--red)">{{ p.nombre }}</span></h1>
+  <a href="/admin/productos/editar/{{ p.id }}" class="btn btn-ghost">← Volver al producto</a>
+</div>
+
+<!-- INFO MÍNIMOS -->
+<div style="background:rgba(200,168,75,.06);border:1px solid rgba(200,168,75,.2);padding:1rem 1.2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1rem">
+  <span style="font-size:1.5rem">📐</span>
+  <div>
+    <div style="font-family:var(--font-h);font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:.4rem">Especificaciones recomendadas para imágenes</div>
+    <div style="font-size:.8rem;color:var(--gray);line-height:1.7">
+      · <strong style="color:var(--white)">Tamaño mínimo:</strong> 800 × 800 px &nbsp;·&nbsp; <strong style="color:var(--white)">Recomendado:</strong> 1000 × 1000 px o mayor<br>
+      · <strong style="color:var(--white)">Relación de aspecto:</strong> 1:1 (cuadrada) para mejor visualización<br>
+      · <strong style="color:var(--white)">Formato:</strong> JPG o PNG &nbsp;·&nbsp; <strong style="color:var(--white)">Peso máximo:</strong> 12 MB por imagen<br>
+      · <strong style="color:var(--white)">Fondo:</strong> Negro, blanco o neutro — sin marcas de agua<br>
+      · <strong style="color:var(--white)">Cantidad máxima sugerida:</strong> 6 imágenes por producto
+    </div>
+  </div>
+</div>
+
+<!-- IMAGEN PRINCIPAL -->
+<div class="card" style="margin-bottom:1.5rem">
+  <div class="card-head"><h3>Imagen principal</h3></div>
+  <div style="padding:1.2rem;display:flex;align-items:center;gap:1.5rem">
+    {% if p.imagen %}
+      <img src="/static/{{ p.imagen }}" style="width:100px;height:100px;object-fit:cover;border:1px solid var(--border)"/>
+      <div style="font-size:.82rem;color:var(--gray)">La imagen principal se cambia desde <a href="/admin/productos/editar/{{ p.id }}" style="color:var(--red)">Editar producto →</a></div>
+    {% else %}
+      <div style="width:100px;height:100px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:2.5rem;border:1px solid var(--border)">📷</div>
+      <div style="font-size:.82rem;color:var(--gray)">Sin imagen principal. <a href="/admin/productos/editar/{{ p.id }}" style="color:var(--red)">Agregar →</a></div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- IMÁGENES EXTRA -->
+<div class="card" style="margin-bottom:1.5rem">
+  <div class="card-head">
+    <h3>Imágenes adicionales <span style="color:var(--gray);font-size:.85rem;font-weight:400">({{ imgs|length }} agregadas)</span></h3>
+  </div>
+  {% if imgs %}
+  <div style="padding:1.2rem;display:flex;flex-wrap:wrap;gap:.75rem">
+    {% for img in imgs %}
+    <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:.4rem">
+      <img src="/static/{{ img.imagen }}" style="width:110px;height:110px;object-fit:cover;border:1px solid var(--border)"/>
+      <form method="POST" action="/admin/productos/imagenes/eliminar/{{ img.id }}" onsubmit="return confirm('¿Eliminar esta imagen?')">
+        <button type="submit" class="btn btn-danger btn-sm" style="width:110px;justify-content:center">🗑 Eliminar</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="padding:2rem;text-align:center;color:var(--gray);font-size:.85rem">Sin imágenes adicionales aún.</div>
+  {% endif %}
+</div>
+
+<!-- AGREGAR IMÁGENES -->
+<div class="card">
+  <div class="card-head"><h3>Agregar imágenes adicionales</h3></div>
+  <div style="padding:1.4rem">
+    <form method="POST" enctype="multipart/form-data">
+      <div class="field" style="margin-bottom:1.2rem">
+        <label>Seleccionar imágenes (puedes elegir varias a la vez)</label>
+        <input name="imagenes" type="file" accept="image/*" multiple onchange="previewMulti(this)"/>
+        <div class="hint">Mínimo 800×800px · JPG, PNG, WEBP · Puedes subir hasta 6 imágenes a la vez</div>
+      </div>
+      <div id="multi-preview" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem"></div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-red">+ Agregar imágenes</button>
+        <a href="/admin/productos" class="btn btn-ghost">Volver al listado</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function previewMulti(input){
+  const wrap = document.getElementById('multi-preview');
+  wrap.innerHTML='';
+  Array.from(input.files).forEach(file => {
+    const r = new FileReader();
+    r.onload = e => {
+      const div = document.createElement('div');
+      div.style.cssText='position:relative';
+      div.innerHTML=`<img src="${e.target.result}" style="width:90px;height:90px;object-fit:cover;border:1px solid var(--border)"/>`;
+      wrap.appendChild(div);
+    };
+    r.readAsDataURL(file);
+  });
+}
+</script>
+{% endblock %}

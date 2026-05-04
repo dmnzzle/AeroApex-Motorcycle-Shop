@@ -1,0 +1,41 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Página de Información{% endblock %}
+{% block page_title %}Editar Página de Información{% endblock %}
+{% block content %}
+<div style="max-width:760px">
+  <div style="background:rgba(230,0,0,.06);border:1px solid rgba(230,0,0,.15);border-left:3px solid var(--red);padding:.75rem 1.2rem;margin-bottom:1.5rem;font-size:.82rem;color:#e87878;font-family:var(--font-h);letter-spacing:.04em">
+    ✏️ Edita el contenido de la página de Información · Envíos · Contacto.
+  </div>
+  <form method="POST">
+    <div class="form-card">
+      <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="width:8px;height:8px;background:var(--red);display:inline-block"></span>ENVÍOS
+      </div>
+      <div class="field" style="margin-bottom:1rem">
+        <label>Envíos en Bogotá</label>
+        <textarea name="info_envio_bogota" rows="2">{{ cfg.info_envio_bogota }}</textarea>
+        <div class="hint">Descripción de envíos gratis en Bogotá</div>
+      </div>
+      <div class="field">
+        <label>Envíos nacionales</label>
+        <textarea name="info_envio_nacional" rows="2">{{ cfg.info_envio_nacional }}</textarea>
+        <div class="hint">Descripción de envíos a otras ciudades</div>
+      </div>
+    </div>
+    <div class="form-card">
+      <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="width:8px;height:8px;background:var(--red);display:inline-block"></span>CONTENIDO DE TARJETAS
+      </div>
+      <div class="field" style="margin-bottom:1rem"><label>¿Cómo comprar?</label><textarea name="info_como_comprar" rows="3">{{ cfg.info_como_comprar }}</textarea></div>
+      <div class="field" style="margin-bottom:1rem"><label>Garantía y devoluciones</label><textarea name="info_garantia" rows="3">{{ cfg.info_garantia }}</textarea></div>
+      <div class="field" style="margin-bottom:1rem"><label>Formas de pago</label><textarea name="info_pagos" rows="2">{{ cfg.info_pagos }}</textarea></div>
+      <div class="field" style="margin-bottom:1rem"><label>Sobre Aero Apex</label><textarea name="info_sobre_nosotros" rows="3">{{ cfg.info_sobre_nosotros }}</textarea></div>
+      <div class="field"><label>Preguntas frecuentes (FAQ)</label><textarea name="info_faq" rows="4">{{ cfg.info_faq }}</textarea><div class="hint">Escribe cada pregunta y respuesta en líneas separadas</div></div>
+    </div>
+    <div style="display:flex;gap:.75rem;margin-top:1.5rem">
+      <button type="submit" class="btn btn-red" style="font-size:1rem;padding:.75rem 2rem">💾 GUARDAR CAMBIOS</button>
+      <a href="/info" target="_blank" class="btn btn-ghost">Ver página →</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

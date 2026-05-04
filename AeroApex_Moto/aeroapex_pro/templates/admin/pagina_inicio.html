@@ -1,0 +1,85 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Página de Inicio{% endblock %}
+{% block page_title %}Editar Página de Inicio{% endblock %}
+{% block content %}
+<div style="max-width:760px">
+
+  <div style="background:rgba(230,0,0,.06);border:1px solid rgba(230,0,0,.15);border-left:3px solid var(--red);padding:.75rem 1.2rem;margin-bottom:1.5rem;font-size:.82rem;color:#e87878;font-family:var(--font-h);letter-spacing:.04em">
+    ✏️ Todo lo que cambies aquí se refleja al instante en la tienda. No necesitas tocar código.
+  </div>
+
+  <form method="POST">
+
+    <!-- BARRA ANUNCIOS -->
+    <div class="form-card">
+      <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="width:8px;height:8px;background:var(--red);display:inline-block"></span>BARRA ROJA SUPERIOR
+      </div>
+      <div class="field">
+        <label>Texto del anuncio</label>
+        <input name="ann_texto" value="{{ cfg.ann_texto }}" placeholder="🏍️ ENVÍOS GRATIS EN BOGOTÁ · ..."/>
+        <div class="hint">Aparece en la franja roja en la parte más alta del sitio</div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="form-card">
+      <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="width:8px;height:8px;background:var(--red);display:inline-block"></span>SECCIÓN HERO (PORTADA)
+      </div>
+      <div class="field" style="margin-bottom:1rem">
+        <label>Etiqueta pequeña sobre el título</label>
+        <input name="hero_subtitulo" value="{{ cfg.hero_subtitulo }}" placeholder="Accesorios de Lujo"/>
+        <div class="hint">Texto en rojo que aparece encima del título principal</div>
+      </div>
+      <div class="field" style="margin-bottom:1rem">
+        <label>Título principal del Hero</label>
+        <input name="hero_titulo" value="{{ cfg.hero_titulo }}" placeholder="DOMINA CADA CURVA"/>
+        <div class="hint">Título grande. Escríbelo en MAYÚSCULAS para mejor efecto</div>
+      </div>
+      <div class="field">
+        <label>Descripción / bajada</label>
+        <textarea name="hero_bajada" rows="2">{{ cfg.hero_bajada }}</textarea>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="form-card">
+      <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="width:8px;height:8px;background:var(--red);display:inline-block"></span>BARRA DE ESTADÍSTICAS
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Envío (texto grande)</label><input name="stats_envio" value="{{ cfg.stats_envio }}" placeholder="FREE"/></div>
+        <div class="field"><label>Respuesta (texto grande)</label><input name="stats_respuesta" value="{{ cfg.stats_respuesta }}" placeholder="24h"/></div>
+      </div>
+      <div class="hint" style="margin-top:.25rem">Los otros valores (500+, 100%) son fijos. La etiqueta "Envío Bogotá" y "Respuesta" son fijas.</div>
+    </div>
+
+    <!-- SECCIONES DE PRODUCTOS -->
+    <div class="form-card">
+      <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="width:8px;height:8px;background:var(--red);display:inline-block"></span>TÍTULOS DE SECCIONES
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Título sección Destacados</label><input name="sec_destacados_titulo" value="{{ cfg.sec_destacados_titulo }}" placeholder="Productos Destacados"/></div>
+        <div class="field"><label>Título sección Nuevos</label><input name="sec_nuevos_titulo" value="{{ cfg.sec_nuevos_titulo }}" placeholder="Nuevos Ingresos"/></div>
+      </div>
+    </div>
+
+    <!-- CTA WHATSAPP -->
+    <div class="form-card">
+      <div style="font-family:var(--font-h);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="width:8px;height:8px;background:var(--red);display:inline-block"></span>SECCIÓN FINAL — LLAMADO A ACCIÓN
+      </div>
+      <div class="field" style="margin-bottom:1rem"><label>Título</label><input name="cta_titulo" value="{{ cfg.cta_titulo }}" placeholder="¿LISTO PARA EQUIPARTE?"/></div>
+      <div class="field" style="margin-bottom:1rem"><label>Texto</label><textarea name="cta_texto" rows="2">{{ cfg.cta_texto }}</textarea></div>
+      <div class="field"><label>Texto del botón WhatsApp</label><input name="cta_btn" value="{{ cfg.cta_btn }}" placeholder="ESCRIBIR POR WHATSAPP"/></div>
+    </div>
+
+    <div style="display:flex;gap:.75rem;margin-top:1.5rem">
+      <button type="submit" class="btn btn-red" style="font-size:1rem;padding:.75rem 2rem">💾 GUARDAR TODOS LOS CAMBIOS</button>
+      <a href="/" target="_blank" class="btn btn-ghost">Ver tienda →</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

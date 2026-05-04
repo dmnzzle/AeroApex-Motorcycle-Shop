@@ -1,0 +1,60 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{% if b %}Editar{% else %}Nuevo{% endif %} Banner{% endblock %}
+{% block page_title %}{% if b %}Editar Banner{% else %}Nuevo Banner{% endif %}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% if b %}Editar Banner{% else %}Nuevo Banner{% endif %}</h1>
+  <a href="/admin/banners" class="btn btn-ghost">← Volver</a>
+</div>
+<div class="form-card">
+  <form method="POST" enctype="multipart/form-data">
+    <div class="form-grid" style="margin-bottom:1rem">
+      <div class="field"><label>Título (opcional)</label><input name="titulo" value="{{ b.titulo if b else '' }}" placeholder="Ej: NUEVA COLECCIÓN"/></div>
+      <div class="field"><label>Orden</label><input name="orden" type="number" value="{{ b.orden if b else 0 }}" min="0"/></div>
+    </div>
+    <div class="field" style="margin-bottom:1rem">
+      <label>Subtítulo (opcional)</label>
+      <input name="subtitulo" value="{{ b.subtitulo if b else '' }}" placeholder="Ej: Accesorios premium para tu moto"/>
+    </div>
+    <div class="field" style="margin-bottom:1rem">
+      <label>Link al hacer clic (opcional)</label>
+      <input name="link" value="{{ b.link if b else '' }}" placeholder="Ej: /catalogo  o  /categoria/1"/>
+      <div class="hint">Deja vacío si no quieres que sea clickeable</div>
+    </div>
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>Imagen del banner *</label>
+      <input name="imagen" type="file" accept="image/*" onchange="previewBanner(this)"/>
+      <div class="hint">Recomendado: 1400×500px · JPG, PNG · Máx 12MB{% if b and b.imagen %} · <span style="color:var(--success)">✓ Imagen actual cargada</span>{% endif %}</div>
+    </div>
+    {% if b and b.imagen %}
+    <div style="margin-bottom:1rem">
+      <img src="/static/{{ b.imagen }}" style="width:100%;max-height:180px;object-fit:cover;border:1px solid var(--border)"/>
+    </div>
+    {% endif %}
+    <div id="banner-preview" style="display:none;margin-bottom:1rem">
+      <img id="banner-img-preview" style="width:100%;max-height:180px;object-fit:cover;border:1px solid var(--border)"/>
+    </div>
+    <label class="check-row" style="margin-bottom:1.3rem">
+      <input type="checkbox" name="activo" {% if not b or b.activo %}checked{% endif %}/> Banner activo (visible en la tienda)
+    </label>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-red">{% if b %}GUARDAR CAMBIOS{% else %}CREAR BANNER{% endif %}</button>
+      <a href="/admin/banners" class="btn btn-ghost">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function previewBanner(input){
+  if(input.files&&input.files[0]){
+    const r=new FileReader();
+    r.onload=e=>{
+      document.getElementById('banner-preview').style.display='block';
+      document.getElementById('banner-img-preview').src=e.target.result;
+    };
+    r.readAsDataURL(input.files[0]);
+  }
+}
+</script>
+{% endblock %}

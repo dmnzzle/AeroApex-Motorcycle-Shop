@@ -1,0 +1,42 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Categorías{% endblock %}
+{% block page_title %}Categorías{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Categorías <span style="color:var(--gray);font-size:1rem;font-weight:400">({{ cats|length }})</span></h1>
+  <a href="/admin/categorias/nueva" class="btn btn-red">+ Nueva categoría</a>
+</div>
+<div class="card">
+  <table>
+    <thead><tr><th>Imagen</th><th>Nombre</th><th>Descripción</th><th>Orden</th><th>Productos</th><th>Estado</th><th>Acciones</th></tr></thead>
+    <tbody>
+    {% for c in cats %}
+    <tr>
+      <td>
+        {% if c.imagen %}
+          <img src="/static/{{ c.imagen }}" style="width:56px;height:38px;object-fit:cover;border:1px solid var(--border)"/>
+        {% else %}
+          <div style="width:56px;height:38px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:.55rem;font-weight:700;color:var(--gray2);letter-spacing:.05em;text-transform:uppercase">SIN IMG</div>
+        {% endif %}
+      </td>
+      <td><strong style="font-family:var(--font-h);text-transform:uppercase;letter-spacing:.04em">{{ c.nombre }}</strong></td>
+      <td style="color:var(--gray);font-size:.78rem;max-width:200px">{{ c.descripcion[:60] if c.descripcion else '—' }}</td>
+      <td style="color:var(--gray)">{{ c.orden }}</td>
+      <td><span class="badge b-red">{{ c.productos|length }}</span></td>
+      <td>{% if c.activa %}<span class="badge b-ok">Activa</span>{% else %}<span class="badge b-gray">Inactiva</span>{% endif %}</td>
+      <td>
+        <div style="display:flex;gap:.35rem">
+          <a href="/admin/categorias/editar/{{ c.id }}" class="btn btn-ghost btn-sm">Editar</a>
+          <form method="POST" action="/admin/categorias/eliminar/{{ c.id }}" style="display:inline" onsubmit="return confirm('¿Eliminar {{ c.nombre }}?')">
+            <button type="submit" class="btn btn-danger btn-sm">×</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" style="text-align:center;color:var(--gray);padding:2rem">Sin categorías. <a href="/admin/categorias/nueva" style="color:var(--red)">Crear →</a></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Imágenes de Secciones{% endblock %}
+{% block page_title %}Imágenes de Secciones{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Imágenes de Secciones</h1></div>
+<div style="background:rgba(200,168,75,.06);border:1px solid rgba(200,168,75,.15);padding:.75rem 1rem;margin-bottom:1.5rem;font-size:.82rem;color:var(--gold);font-family:var(--font-h);letter-spacing:.04em">
+  ℹ Cambia las imágenes de fondo de cada sección. Se muestra el tamaño mínimo recomendado.
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem">
+  {% set defs = [('hero','Hero principal','1400×500px mínimo'),('categorias','Fondo Categorías','600×400px mínimo'),('marcas','Imagen Marcas','1200×600px mínimo'),('proximamente','Fondo Próximamente','1400×400px mínimo')] %}
+  {% for slug, nombre, tamano in defs %}
+  {% set sec = secs|selectattr('seccion','equalto',slug)|first if secs else none %}
+  <div style="background:var(--bg2);border:1px solid var(--border)">
+    <div style="padding:.85rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:var(--font-h);font-size:.88rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em">{{ nombre }}</div>
+      <span style="background:rgba(200,168,75,.12);color:var(--gold);border:1px solid rgba(200,168,75,.2);padding:.18rem .55rem;font-family:var(--font-h);font-size:.65rem;font-weight:800;text-transform:uppercase">{{ tamano }}</span>
+    </div>
+    <div style="padding:1rem">
+      {% if sec and sec.imagen %}
+      <img src="/static/{{ sec.imagen }}" style="width:100%;height:100px;object-fit:cover;border:1px solid var(--border);margin-bottom:.75rem"/>
+      {% else %}
+      <div style="width:100%;height:80px;background:var(--bg3);border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:.78rem;color:var(--gray);margin-bottom:.75rem">Sin imagen personalizada</div>
+      {% endif %}
+      <a href="/admin/secciones/{{ slug }}" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center">Cambiar imagen</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

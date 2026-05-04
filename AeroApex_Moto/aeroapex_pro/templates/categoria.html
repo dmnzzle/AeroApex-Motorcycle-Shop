@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}{{ cat.nombre }} · Aero Apex{% endblock %}
+{% block extra_head %}
+<style>
+.shop-wrap{display:grid;grid-template-columns:220px 1fr;max-width:1300px;margin:0 auto}
+.shop-side{border-right:1px solid var(--border);padding:2rem 1.5rem;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto}
+.shop-main{padding:2rem}
+.side-title{font-family:var(--font-head);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.18em;color:#444;margin-bottom:1rem}
+.side-link{display:flex;align-items:center;justify-content:space-between;padding:.5rem .75rem;font-size:.84rem;color:var(--gray);transition:.18s;border-left:2px solid transparent}
+.side-link:hover{color:var(--white);background:rgba(255,255,255,.03)}
+.side-link.active{color:var(--red);border-left-color:var(--red)}
+.cat-page-head{padding:3rem 2rem 2rem;border-bottom:1px solid var(--border);background:var(--dark2)}
+.cat-page-head h1{font-family:var(--font-display);font-size:clamp(2rem,6vw,4rem);letter-spacing:.04em}
+.breadcrumb{font-size:.75rem;color:var(--gray);display:flex;gap:.5rem;margin-bottom:.75rem;font-family:var(--font-head);letter-spacing:.06em;text-transform:uppercase}
+.breadcrumb a:hover{color:var(--red)}
+@media(max-width:768px){.shop-wrap{grid-template-columns:1fr}.shop-side{position:static;height:auto;border:none;border-bottom:1px solid var(--border)}}
+</style>
+{% endblock %}
+{% block content %}
+<div class="cat-page-head">
+  <div style="max-width:1300px;margin:0 auto">
+    <div class="breadcrumb"><a href="/">Inicio</a><span>/</span><a href="/catalogo">Catálogo</a><span>/</span><span style="color:var(--white)">{{ cat.nombre }}</span></div>
+    <h1>{{ cat.nombre }}</h1>
+    {% if cat.descripcion %}<p style="color:var(--gray);margin-top:.4rem">{{ cat.descripcion }}</p>{% endif %}
+  </div>
+</div>
+<div class="shop-wrap">
+  <aside class="shop-side">
+    <div class="side-title">Categorías</div>
+    <a href="/catalogo" class="side-link">← Todo el catálogo</a>
+    {% for c in cats %}
+    <a href="/categoria/{{ c.id }}" class="side-link {% if c.id==cat.id %}active{% endif %}">{{ c.nombre }}</a>
+    {% endfor %}
+    <div class="side-title" style="margin-top:2rem">Ordenar</div>
+    <form method="GET">
+      {% for val,lbl in [('nuevo','Más recientes'),('precio_asc','Precio ↑'),('precio_desc','Precio ↓')] %}
+      <button type="submit" name="sort" value="{{ val }}" style="display:block;width:100%;text-align:left;padding:.5rem .75rem;background:none;border:none;font-family:var(--font);font-size:.84rem;color:{% if sort==val %}var(--red){% else %}var(--gray){% endif %};cursor:pointer;border-left:2px solid {% if sort==val %}var(--red){% else %}transparent{% endif %}">{{ lbl }}</button>
+      {% endfor %}
+    </form>
+  </aside>
+  <div class="shop-main">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+      <span style="font-size:.82rem;color:var(--gray);font-family:var(--font-head);letter-spacing:.08em;text-transform:uppercase">{{ prods|length }} producto{% if prods|length!=1 %}s{% endif %}</span>
+    </div>
+    {% if prods %}
+    <div class="grid-bg"><div class="grid-4r">{% for p in prods %}{% include 'partials/pcard.html' %}{% endfor %}</div></div>
+    {% else %}
+    <div style="padding:4rem;text-align:center;color:var(--gray)"><div style="font-size:3rem;margin-bottom:1rem">{{ cat.icono }}</div>No hay productos en esta categoría aún.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
