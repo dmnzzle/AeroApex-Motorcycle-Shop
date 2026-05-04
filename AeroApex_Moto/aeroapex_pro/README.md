@@ -7,7 +7,7 @@ python app.py
 ```
 - Tienda: http://localhost:5000
 - Admin:  http://localhost:5000/admin
-- Usuario: admin / aeroapex2024
+
 
 ## Desplegar en Railway (gratis, en la nube)
 
